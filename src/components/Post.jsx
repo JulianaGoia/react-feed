@@ -28,7 +28,7 @@ export function Post(props) {
         'Post muito bacana!'
     ])
 
-    const [newCommentText, setNewCommentText] = useState('');
+    const [newCommentText, setNewCommentText] = useState(''); //valor inicial da variavel
 
     function handleCreateNewComment(event) {
         event.preventDefault()
@@ -43,6 +43,14 @@ export function Post(props) {
 
     function handleNewCommentChange() {
         setNewCommentText(event.target.value)
+    }
+
+    function deleteComment(commentToDelete) {
+        // filter onde retorn uma nova lista de comentarios que sejam diferentes do comentario que eu quero deletar
+        const commentsWithoutDeletedOne = comments.filter(comment => {
+            return comment != commentToDelete
+        })
+        setComments(commentsWithoutDeletedOne);
     }
 
     return (
@@ -64,9 +72,9 @@ export function Post(props) {
             <div className={styles.content}>
                 {props.content.map(line => {
                     if (line.type === 'paragraph') {
-                        return <p>{line.content}</p>;
+                        return <p key={line.content}>{line.content}</p>;
                     } else if (line.type === 'link') {
-                        return <p><a href="#">{line.content}</a></p>;
+                        return <p key={line.content}><a href="#">{line.content}</a></p>;
                     }
                 })}
 
@@ -89,7 +97,7 @@ export function Post(props) {
             </form>
             <div className={styles.commentList}>
                 {comments.map(comment => {
-                    return  <Comment content={comment} />
+                    return  <Comment key={comment} content={comment} onDeleteComment={deleteComment}/>
                 })}
             </div>
         </article>
